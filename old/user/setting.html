@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KALAMSTORE</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="../assets/css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="../assets/css/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="assets/css/app.css" />
+  </head>
+
+  <body>
+    <!-- ash top and body start -->
+    <div>
+      <div class="containerBody">
+        <!-- top section start  -->
+
+        <div class="top-section top-wala">
+          <h3 id="user-name-welcome" class="user-name-welcome-new">
+            <i class="bi bi-gear"></i>
+            Setting
+          </h3>
+        </div>
+
+        <div class="setting-body">
+          <div class="load-user-details">
+            <div>
+              <i class="bi bi-person"></i>
+            </div>
+            <div class="load-user-details-right-div">
+              <span id="username-setting"></span>
+            </div>
+          </div>
+          <a href="profile.html" class="load-user-details" id="my-profile">
+            <div>
+              <i class="bi bi-person-gear"></i>
+            </div>
+            <div class="load-user-details-right-div">
+              <span>My profile</span>
+            </div>
+          </a>
+          <a
+            href="order-history.html"
+            class="load-user-details"
+            id="order-history-a"
+          >
+            <div>
+              <i class="bi bi-list-columns-reverse"></i>
+            </div>
+            <div class="load-user-details-right-div">
+              <span>Order history</span>
+            </div>
+          </a>
+          <a href="wishlist.html" class="load-user-details" id="wishlist-a">
+            <div>
+              <i class="bi bi-heart"></i>
+            </div>
+            <div class="load-user-details-right-div">
+              <span>My wishlist</span>
+            </div>
+          </a>
+          <a href="address.html" class="load-user-details" id="Address-a">
+            <div>
+              <i class="bi bi-house-add"></i>
+            </div>
+            <div class="load-user-details-right-div">
+              <span>Address</span>
+            </div>
+          </a>
+          <a href="wallet.html" class="load-user-details" id="walletpage">
+            <div>
+              <i class="bi bi-wallet"></i>
+            </div>
+            <div class="load-user-details-right-div">
+              <span>Wallet/Refer Earn</span>
+            </div>
+          </a>
+          <a href="other.html?id=tnc" class="load-user-details">
+            <div>
+              <i class="bi bi-card-checklist"></i>
+            </div>
+            <div class="load-user-details-right-div">
+              <span>Terms and Conditions</span>
+            </div>
+          </a>
+          <a href="other.html?id=faq" class="load-user-details">
+            <div>
+              <i class="bi bi-question-diamond"></i>
+            </div>
+            <div class="load-user-details-right-div">
+              <span>Faqs</span>
+            </div>
+          </a>
+          <a href="other.html?id=csp" class="load-user-details">
+            <div>
+              <i class="bi bi-telephone-forward"></i>
+            </div>
+            <div class="load-user-details-right-div">
+              <span>Customer Support</span>
+            </div>
+          </a>
+          <a
+            class="load-user-details"
+            onclick="deleteMyAccount()"
+            id="deleteMyAccount-a"
+          >
+            <div>
+              <i class="bi bi-person-fill-x"></i>
+            </div>
+            <div class="load-user-details-right-div">
+              <span>Delete My Account</span>
+            </div>
+          </a>
+          <div id="morepages">
+            <!-- Add more pages( extra pages adds here) -->
+          </div>
+          <div id="user-btn-status" class="btns-new"></div>
+        </div>
+      </div>
+    </div>
+    <!-- ash top and body end -->
+
+    <!-- ash bottom navigation start -->
+    <nav class="bottomNav">
+      <ul>
+        <li>
+          <a href="notification.html" class="nav-link">
+            <div>
+              <i class="bi bi-bell-fill icon-disable-color"></i>
+            </div>
+            <div class="bottom-dot" hidden></div>
+          </a>
+        </li>
+        <li>
+          <a href="home.html" class="nav-link">
+            <div>
+              <i class="bi bi-house-fill icon-disable-color"></i>
+            </div>
+            <div class="bottom-dot" hidden></div>
+          </a>
+        </li>
+        <li>
+          <a href="setting.html" class="nav-link">
+            <div>
+              <i class="bi bi-person-fill icon-theme-color"></i>
+            </div>
+            <div class="bottom-dot" hidden></div>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <!-- ash bottom navigation end -->
+
+    <script src="../assets/js/jquery-3.6.1.js"></script>
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/popper.min.js"></script>
+    <script src="../assets/js/owl.carousel.min.js"></script>
+    <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+    <script src="../constant.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script src="../assets/js/ashjs.js"></script>
+    <script>
+      loadSettingData();
+      loadextrapages();
+
+      async function loadextrapages() {
+        const formdata = new FormData();
+        formdata.append("type", "119");
+        const req = await fetch(appAPI, { method: "POST", body: formdata });
+        const res = await req.json();
+        console.log(res.data);
+        data = res.data;
+
+        data.map((item) => {
+          $("#morepages").append(pageTemplate(item));
+        });
+      }
+      function pageTemplate(item) {
+    return `
+        <a href="other.html?id=${item.type}" class="load-user-details">
+            <div>
+                <i class="bi bi-arrow-right-circle"></i>
+            </div>
+            <div class="load-user-details-right-div">
+                <span>${item.name}</span>
+            </div>
+        </a>
+    `;
+}
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KALAMSTORE</title>
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="../assets/css/owl.carousel.min.css" />
+    <link rel="stylesheet" href="../assets/css/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="assets/css/app.css" />
+</head>
+
+<body>
+    <!-- ash top and body start -->
+    <div class="back-wala">
+
+        <div class="productCnt productCnt1">
+
+            <!-- top section start  -->
+
+            <div class="top-section-prdt main-box">
+                <div id="user-name-welcome" class="box-wala">
+                    <a class="top-back-btn" id="goBack">
+                        <i class="bi bi-chevron-left"></i>
+                        <span>My Cart</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- top section end  -->
+
+            <div class="cart-container cart-container1">
+                <!-- <h2>Your Cart</h2> -->
+
+                <!-- <div class="cart-total">
+                    <p>
+                        Total: Rs <span id="grand-total"></span>
+                        <button class="cart-remove-all-btn" onclick="cartRemoveAll()">
+                            <i class="bi bi-trash-fill"></i>
+                        </button>
+                    </p>
+                </div> -->
+
+                <div id="cartRes" class="cart-res1"></div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="bottomCart">
+        <button class="checkuot-btn checkuot-btn1" onclick="proceedToCheckoutPage()">
+            Proceed to Checkout
+            <i class="bi bi-arrow-right"></i>
+        </button>
+    </div>
+
+
+    <!-- ash top and body end -->
+
+
+    <script src="../assets/js/jquery-3.6.1.js"></script>
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/js/popper.min.js"></script>
+    <script src="../assets/js/owl.carousel.min.js"></script>
+    <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+    <script src="../constant.js"></script>
+    <script src="assets/js/app.js"></script>
+    <script>
+        loadCart();
+    </script>
+</body>
+
+</html>

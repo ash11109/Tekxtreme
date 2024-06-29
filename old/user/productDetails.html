@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KALAMSTORE</title>
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="../assets/css/owl.carousel.min.css" />
+  <link rel="stylesheet" href="../assets/css/owl.theme.default.min.css" />
+  <link rel="stylesheet" href="assets/css/app.css" />
+</head>
+
+<body>
+  <!-- ash top and body start -->
+  <div>
+
+    <div class="productCnt">
+
+      <!-- top section start  -->
+
+      <div class="top-section-prdt flex-top">
+        <!-- <div class="black"></div> -->
+        <div class="top-flex">
+          <div id="user-name-welcome">
+            <a class="top-back-btn" id="goBack">
+              <i class="bi bi-chevron-left"></i>
+              <span>back</span>
+            </a>
+          </div>
+          <button class="cart-button" onclick="goToCart()">
+            <i class="bi bi-cart-fill icon-theme-color"></i>
+            <span id="cart-count">0</span>
+          </button>
+        </div>
+        <!-- <div class="search">
+        </div> -->
+      </div>
+
+      <!-- top section end  -->
+
+      <div class="load-single-product">
+        <div class="liked">
+          <span id="addtoFav"></span>
+          <!-- <i class="bi bi-share"></i> -->
+        </div>
+
+        <div class="product-slide">
+          <div class="owl-carousel owl-theme main-var" id="mainProdisplay"></div>
+          <div class="owl-carousel-thumb" id="owl-thumb"></div>
+        </div>
+
+        <div class="prod-details-pg">
+          <h2 id="prod-name" class="pr-nm"></h2>
+          <span id="category_name"></span>
+          <div class="price-section">
+            <div class="price-section-flex">
+              <div>
+                <span> Discount </span>
+                <b id="off-percent"></b>
+              </div>
+              <div>
+                <span> Price </span>
+                <span id="price" class="pr-pr"></span>
+                <span id="fprice" class="pr-fpr"></span>
+              </div>
+              <div>
+                <span> Quantity </span>
+                <span class="kg" id="type_1_val"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="more-variant-div-sp">
+            <h4 class="desh-h4">More variant</h4>
+            <div id="moreVariantSingleProduct" class="variant-list-div-sp"></div>
+          </div>
+          <div>
+            <h2> Description </h2>
+            <hr>
+            <p id="product-desc" class="pr-des"></p>
+          </div>
+        </div>
+      </div>
+       
+      <!-- recommanded products -->
+      <div class="hot-deals-div">
+        <h2 class="hot-deals-h2">Recent Products</h2>
+        <div id="recent-products-id"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="bottomCart">
+    <div id="incDecBtn"></div>
+    <div id="addtocart"></div>
+  </div>
+
+
+  <!-- ash top and body end -->
+
+
+  <script src="../assets/js/jquery-3.6.1.js"></script>
+  <script src="../assets/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/popper.min.js"></script>
+  <script src="../assets/js/owl.carousel.min.js"></script>
+  <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+  <script src="../constant.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    loadSingleProduct();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KALAMSTORE</title>
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="../assets/css/owl.carousel.min.css" />
+  <link rel="stylesheet" href="../assets/css/owl.theme.default.min.css" />
+  <link rel="stylesheet" href="assets/css/app.css" />
+</head>
+
+
+<body>
+  <!-- ash top and body start -->
+  <div>
+
+    <div class="productCnt">
+
+      <!-- top section start  -->
+
+      <div class="top-section-prdt top-section-update ">
+        <!-- <div class="black"></div> -->
+        <div id="user-name-welcome" class="top-section-update2">
+          <a class="top-back-btn" id="goBack">
+            <i class="bi bi-chevron-left"></i>
+            <span>Order Details</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- top section end  -->
+
+
+      <h3 class="checkout-header">Details</h3>
+
+      <div class="checkout-header but-update">
+        <h6>ID : <input id="order-id" class="order-id-inp" readonly></h6>
+        <span id="cancel-btn">
+          <button onclick="cancelOrder()" class="btn1">cancel</button>
+        </span>
+      </div>
+
+      <div class="checkout-container checkout-container1">
+
+
+
+        <div class="c-product-section" id="load_product_list_invoice">
+          <hr />
+        </div>
+
+
+        <div class="c-invoice-section-mid">
+          <div class="c-invoice-section-data">
+            <span id="price-label">...</span>
+            <span id="total-price" class="rs-symbol"> ...</span>
+          </div>
+
+
+          <div class="c-invoice-section-data">
+            <span>Discount</span>
+            <span id="discount" class="rs-symbol">...</span>
+          </div>
+          <hr>
+          <div class="c-invoice-section-data">
+            <span>Total</span>
+            <span id="grand-total" class="rs-symbol">...</span>
+          </div>
+        </div>
+        <div class="c-address-section">
+          <div class="c-address-section-top">
+            <div id="cs-name">...</div>
+
+          </div>
+          <div class="c-address-section-mid">
+            <div id="cs-full-addr">....</div>
+          </div>
+          <div class="c-address-section-bot">
+            <div id="cs-mob-no">....</div>
+          </div>
+        </div>
+        <div class="c-invoice-section">
+          <div class="c-invoice-section-top">
+            <a href="invoice.html" id="page_link"><i class="bi bi-download"></i>Invoice</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+  </div>
+
+  <!-- ash top and body end -->
+
+  <!-- ash bottom navigation start -->
+  <nav class="bottomNav">
+    <ul>
+      <li>
+        <a href="notification.html" class="nav-link">
+          <div>
+            <i class="bi bi-bell-fill icon-disable-color"></i>
+          </div>
+          <div class="bottom-dot" hidden></div>
+        </a>
+      </li>
+      <li>
+        <a href="home.html" class="nav-link">
+          <div>
+            <i class="bi bi-house-fill icon-disable-color"></i>
+          </div>
+          <div class="bottom-dot" hidden></div>
+        </a>
+      </li>
+      <li>
+        <a href="setting.html" class="nav-link">
+          <div>
+            <i class="bi bi-person-fill icon-disable-color"></i>
+          </div>
+          <div class="bottom-dot" hidden></div>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <!-- ash bottom navigation end -->
+
+  <script src="../assets/js/jquery-3.6.1.js"></script>
+  <script src="../assets/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/popper.min.js"></script>
+  <script src="../assets/js/owl.carousel.min.js"></script>
+  <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+  <script src="../constant.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const id = urlSearchParams.get('id');
+    loadOrderDetails(id);
+    document.getElementById("page_link").href += `?id=${id}` ;
+  </script>
+</body>
+
+
+</html>

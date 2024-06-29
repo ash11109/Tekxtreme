@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KALAMSTORE</title>
+  <link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="../assets/css/owl.carousel.min.css" />
+  <link rel="stylesheet" href="../assets/css/owl.theme.default.min.css" />
+  <link rel="stylesheet" href="assets/css/app.css" />
+</head>
+
+<body  onload="autoClick()">
+  <!-- ash top and body start -->
+  <div>
+
+    <div class="containerBody">
+
+      <div class="productCnt">
+
+        <!-- top section start  -->
+
+        <div class="top-section">
+          <!-- <div class="black"></div> -->
+          <div class="top-flex top-flex-change">
+          <div id="user-name-welcome">
+            <a class="top-back-btn" href="home.html">
+              <i class="bi bi-chevron-left"></i>
+              <span>Home</span>
+            </a>
+          </div>
+          <button class="cart-button" onclick="goToCart()"><i class="bi bi-cart"></i> <span id="cart-count">0</span>
+          </button>
+          </div>
+
+
+          <div class="search">
+            
+            <input id="inp-srch" type="text" class="input-search-product-page" placeholder="Search" onkeyup="filterProduct(this)">
+
+            <span id="scanBtnQR"><i class="bi bi-upc-scan"></i></span>
+
+            <button type="button" class="btn btn-light mb-1 filter-btn" data-bs-toggle="modal" data-bs-target="#filterModal"><i class="bi bi-sliders"></i></button>
+            
+          </div>
+
+        </div>
+
+        <div class="top-section-gap-pro"></div>
+
+        <!-- top section end  -->
+
+
+        <!-- product List -->
+
+
+        <!-- prodcut section  -->
+        <div class="productSection">
+          <div class="prod-Section-body">
+            <div id="loadAllProduct" class="prod-list lists"></div>
+          </div>
+        </div>
+
+
+      </div>
+
+
+    </div>
+
+  </div>
+  <!-- ash top and body end -->
+
+  <!-- ash bottom navigation start -->
+  <nav class="bottomNav">
+    <ul>
+      <li>
+        <a href="notification.html" class="nav-link">
+          <div>
+            <i class="bi bi-bell-fill icon-disable-color"></i>
+          </div>
+          <div class="bottom-dot" hidden></div>
+        </a>
+      </li>
+      <li>
+        <a href="home.html" class="nav-link">
+          <div>
+            <i class="bi bi-house-fill icon-disable-color"></i>
+          </div>
+          <div class="bottom-dot" hidden></div>
+        </a>
+      </li>
+      <li>
+        <a href="setting.html" class="nav-link">
+          <div>
+            <i class="bi bi-person-fill icon-disable-color"></i>
+          </div>
+          <div class="bottom-dot" hidden></div>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <!-- ash bottom navigation end -->
+
+  <!-- filter modal start  -->
+
+  <div class="modal modal-bottom fade" id="filterModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Filter</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="gtr">
+            <div class="p-2">
+              <button 
+                class="btn btn-light btn-but  rounded-pill"
+                onclick="filterProduct(this,'SortByNameA_Z')">  Sort by name (A-Z)
+              <input type="radio" name="sortOption" >
+              </button>
+                
+            </div>
+            <div class="p-2">
+              <button class="btn btn-light btn-but  rounded-pill"
+              onclick="filterProduct(this,'SortByNameZ_A')">  Sort by name (Z-A)
+            <input type="radio" name="sortOption">
+            </button>
+              
+            </div>
+            <div class="p-2">
+              <button class="btn btn-light btn-but  rounded-pill"
+              onclick="filterProduct(this,'SortByPriceL_H')">  Sort by price ( low - high )
+            <input type="radio" name="sortOption">
+            </button>
+              
+            </div>
+            <div class="p-2">
+              <button class="btn btn-light btn-but  rounded-pill"
+              onclick="filterProduct(this,'SortByPriceH_L')">  Sort by price ( high -low )
+            <input type="radio" name="sortOption">
+            </button>
+              
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div> 
+
+  
+
+
+  <!-- filter modal end  -->
+
+
+  <!-- variant modal start  -->
+
+  <div class="modal modal-bottom fade" id="variantModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">More variants</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="variantList">
+            <div id="prodContainer"></div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- variant modal end  -->
+
+  <script src="../cordova.js"></script>
+  <script src="../assets/js/jquery-3.6.1.js"></script>
+  <script src="../assets/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/js/popper.min.js"></script>
+  <script src="../assets/js/owl.carousel.min.js"></script>
+  <script src="https://unpkg.com/dexie/dist/dexie.js"></script>
+  <script src="../constant.js"></script>
+  <script src="assets/js/app.js"></script>
+  <script>
+    
+    function autoClick() {
+        document.getElementById("inp-srch").focus();
+    }
+
+    let srch_barcode = localStorage.getItem("srch_barcode");
+    if ( srch_barcode == null) srch_barcode = '' ;
+    if ( srch_barcode != '' ) filterProductProcess();
+
+  </script>
+</body>
+
+</html>

@@ -930,6 +930,7 @@ a {
   font-size: 8px;
   position: relative;
   top: -38px;
+  white-space: nowrap;
 }
 
 .selector-box span b {
@@ -2513,6 +2514,10 @@ input:focus~.bar:after {
   font-size: 13px !important;
   font-weight: 600;
   background: transparent;
+  padding: 0 13px;
+}
+.Wrapper-body-item button:hover{
+  background-color: #fff !important;
 }
 
 .btn-check:checked+.btn,
@@ -2520,7 +2525,7 @@ input:focus~.bar:after {
 .btn.show,
 .btn:first-child:active,
 :not(.btn-check)+.btn:active {
-  background-color: var(--theme-color) !important;
+  /* background-color: var(--theme-color) !important; */
 }
 
 .product .modal-title {
@@ -3504,7 +3509,7 @@ ul li .active .uil {
   }
 
   .navbar {
-    width: 29vw;
+    width: 500px;
   }
 
   .product-detail-update .item {
@@ -3513,7 +3518,7 @@ ul li .active .uil {
   }
 
   .navbar2 {
-    width: 29vw;
+    width: 500px;
   }
 
   .product-detail-update .home-header {
@@ -4495,15 +4500,32 @@ overflow: hidden;
   top: -11px;
   white-space: nowrap;
   left: -3vw !important;
+  
 }
 
 .design-box .oos_class p {
   top: -17px;
 
 }
+.product-imgs span{
+  position:relative;
+}
 
+.product-imgs span i {
+  position: absolute !important;
+  left: 0% !important;
+  z-index: 9;
+
+}
+
+
+  
 /* For Mobile  */
 @media screen and (max-width: 997px) {
+  .product-imgs span i{
+    left: 21vw !important;
+  }
+
   .modal.fade.product .modal-dialog {
     height: auto;
   }
@@ -4626,7 +4648,8 @@ overflow: hidden;
   .oos_class p {
     top: -21px !important;
     /* left: 40px !important; */
-    left: -41px !important;
+    /* left: -41px !important; */
+    left: 13px !important;
     /* left: 17px !important; */
 
 
@@ -4850,6 +4873,7 @@ overflow: hidden;
 
 .c-invoice-section-mid input {
   all: unset;
+  width: 73px;
 }
 
 .rs-symbol::before {
@@ -5362,9 +5386,10 @@ p {
 
 
   .btn1 {
-    font-size: 12px;
+    font-size: 12px !important;
     width: 74px;
     height: 24px;
+    line-height: unset !important;
   }
 
 
@@ -5515,9 +5540,10 @@ p {
 
 #addToCartSP {
   display: flex;
-  /* justify-content: space-between; */
+  justify-content: flex-end;
   gap: 47px;
   align-items: center;
+  flex-direction: row-reverse;
 }
 
 #addToCartSP .add-product-btn button {
@@ -5601,6 +5627,12 @@ p {
 
 
 @media(max-width: 600px) {
+  
+  .new-section-update span i {
+    position: absolute;
+    left: 37vw;
+  }
+
   .checkout-container {
     /* padding: 0rem 0rem 0rem 0rem !important; */
     padding: 4.3rem 0rem !important;
@@ -6051,11 +6083,107 @@ p {
     width: 100px !important;
   }
 }
+
+@media(max-width : 900px){
+  .header-search .last-header {
+    width: 45vw !important;
+  }
+  .header-search {
+    left: 32vw  !important;
+  }
+}
+@media (max-width: 600px) {
+  .header-search .last-header {
+      width: 81vw !important;
+  }
+}
+
 .hr{
   margin: 0px;
 }
 /* Three Pages css *//* Three Pages css *//* Three Pages css *//* Three Pages css */
 
 
+.wallet-nav{
+  background: #29b529;
+      box-shadow: 2px 2px 4px #d7d7d7;
+      display: flex;
+      flex-direction: column;
+      border-radius: 10px;
+      padding: 23px 13px;
+      color: #fff;
+      gap: 12px;
+  }
+  
+  .wallet-nav-detail{
+      display: flex;
+      color: #fff;
+      align-items: center;
+      justify-content: space-between;
+  }
+  .wallet-refer-div{
+    display: flex;
+    /* align-items: center;
+    justify-content: space-between; */
+    flex-direction: column;
+  }
+  .wallet-refer-div button{
+    border: 1px solid #c8c8c8;
+    padding: 1px 9px;
+    border-radius: 10px;
+    font-size: 13px !important;
+    background: #fff;
+    color: black;
+    margin-top: 5px;
+  }
+  .wallet-nav-detail i{
+    padding: 0;
+    color: #5fff5f;
+      text-shadow: 1px 1px 5px #403f3f;
+  }
+  .Wrapper-body-item label{
+      width: 100%;
+    text-align: left;
+    height: 31px;
+    display: flex;
+    align-items: center;
+  }
 
+#myreferel{
+  all: unset;
+  font-weight: 600;
+  margin-left: 5px;
 
+}
+#deliverySlotBtn{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#deliverySlotBtn span{
+padding-right: 18px;
+}
+#deliverySlotBtn button {
+   width: 100%;
+}
+#selectedSlotName
+{
+  width: 195px;
+  white-space: nowrap;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.invoice-img{
+  width: 83px;
+margin: auto;
+padding: 8px;
+
+}
+.invoice-img img{
+width:100%;
+height: 100%;
+  object-fit: cover;
+
+}

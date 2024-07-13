@@ -32,9 +32,58 @@ const owlCarouselSetting = (
   };
 };
 
+
+// const customCat = async () => {
+
+//   iflocalStorage.getItem("customCat") == null ?
+//   const formData = new FormData();
+//   formData.append("type", "97");
+
+//   req = await fetch(appAPI, { method: "POST", body: formData });
+//   res = await req.json();
+//   data = res[0].tbl_value;
+//   localStorage.setItem("customCat", data); : return null;
+// };
+
+const customCat = async () => {
+  if (localStorage.getItem("customCat") === null) {
+    const formData = new FormData();
+    formData.append("type", "97");
+
+    const req = await fetch(appAPI, { method: "POST", body: formData });
+    const res = await req.json();
+    const data = res[0].tbl_value;
+    localStorage.setItem("customCat", data);
+  } else {
+    return null;
+  }
+};
+
+
+const buynowState = async () => {
+
+  if (localStorage.getItem("buynowState") === null) {
+  const formData = new FormData();
+  formData.append("type", "104");
+
+  req = await fetch(appAPI, { method: "POST", body: formData });
+  res = await req.json();
+  data = res[0].tbl_value;
+  localStorage.setItem("buynowState", data);
+}else {
+  return null;
+}
+};
+
+(async function(){
+   await customCat();
+   await buynowState();
+})()
+
+
 // table sync function
 
-async function TableSync() {
+async function TableSync() { 
   const formData = new FormData();
   formData.append("type", "77");
   let req = await fetch(appAPI, { method: "POST", body: formData });
@@ -42,7 +91,7 @@ async function TableSync() {
   let { syncData } = res;
 
   let tableCheck = await db.tablecheck.toArray();
-
+  
   let mismatchedData = [];
 
   if (tableCheck.length == 0) {
@@ -75,19 +124,21 @@ async function TableSync() {
       await loadProductTableSync();
       await loadAddonStatus();
       await loadThemeTableSync();
-    } else {
-      for (let i = 0; i < syncData.length; i++) {
+    } else { 
+      for (let i = 0; i < syncData.length; i++) { 
         const obj1 = syncData[i];
         const obj2 = tableCheck.find((obj) => obj.name === obj1.table_name);
-
-        if (obj2) {
-          if (obj1.table_value !== obj2.value) {
+        if (obj2) {  
+          if (obj1.table_value !== obj2.value) { 
             mismatchedData.push(obj1.table_name);
             await db.tablecheck.update(obj2.id, { value: obj1.table_value });
+          } else {
+            
+            return null;
           }
-        } else {
+        } else {alert("db else");
           await db.tablecheck.clear();
-          syncData.forEach(async (item) => {
+          syncData.forEach(async (item) => {  
             await db.tablecheck.put({
               id: item.id,
               name: item.table_name,
@@ -133,7 +184,7 @@ async function TableSync() {
 
 // load banner
 
-async function loadBannerTableSync() {
+async function loadBannerTableSync() { 
   await db.banner.clear();
 
   const formData = new FormData();
@@ -161,6 +212,8 @@ async function loadBannerTableSync() {
       });
     });
   }
+
+  progressVal(25);
 }
 
 // load category
@@ -189,6 +242,7 @@ async function loadCategoryTableSync() {
         });
     });
   }
+  progressVal(50);
 }
 
 // load product
@@ -275,6 +329,8 @@ async function loadProductTableSync() {
       }
     }
   }
+
+  progressVal(75);
 }
 
 // load addon status
@@ -294,6 +350,8 @@ async function loadAddonStatus() {
     };
     await db.addons.put(data);
   });
+
+  progressVal(85);
 }
 
 // load themes
@@ -305,6 +363,39 @@ async function loadThemeTableSync() {
   let res = await req.json();
   let { data } = res;
   localStorage.setItem("theme", data.theme_name);
+  progressVal(100);
+}
+
+//load cart
+
+async function loadcartTableSync() {
+  await db.banner.clear();
+
+  const formData = new FormData();
+
+  formData.append("type", "31");
+
+  let req = await fetch(appAPI, { method: "POST", body: formData });
+
+  let res = await req.json();
+
+  let data = res;
+
+  console.log(data);
+
+  if (data.status != 1) {
+    data = [];
+  } else {
+    data = data.data;
+
+    data.forEach(async (item) => {
+      await db.banner.put({
+        id: item.id,
+        img: item.image_name,
+        type: item.banner_type,
+      });
+    });
+  }
 }
 
 // all template functions
@@ -993,7 +1084,7 @@ function cartProductTemplate(item, db_pr_qty, fprice) {
 
 //////------------Update end---------------- //////
 
-function orderCardTemplate(item) {
+function orderCardTemplate(item) { console.log(item);
   let timlineStr = "";
 
   let flag = 0;
@@ -1030,7 +1121,7 @@ function orderCardTemplate(item) {
   }
 
   return `
-    <a href ="orderHistoryDetails.html?id=${item.order_id}" class="btn">
+    <a href ="orderHistoryDetails.html?id=${item.order_id}" class="btns">
         <div class="order-card">
             <div class="order-card-top">
                 <span> ORDER ID :  ${item.order_id}  </span>
@@ -1049,7 +1140,7 @@ function orderCardTemplate(item) {
                             : "data fetch error"
                         } <br> 
                         No of items : ${item.NO_OF_ITMES} <br>
-                        Total Amount : &#8377; ${item.TOTAL_AMOUNT}
+                        Total Amount : &#8377; ${item.grand_total}
                     </p>
                 </div>
                 <div>
@@ -1090,7 +1181,7 @@ function gotoProduct(id) {
 function gotoProductListUseCategory(id) {
   localStorage.setItem("cid", id);
   localStorage.setItem("ctid", id);
-  location.href = "all_product.html";
+  location.href = `all_product.html?cid=${id}`;
 }
 
 // all logic function
@@ -1539,7 +1630,7 @@ async function cartRemoveAll() {
   location.reload();
 }
 
-async function removeSingleProductFromCart(id) {
+async function removeSingleProductFromCart(id) { console.log("1");
   id = "" + id;
   if (confirm("are you sure ?")) await db.cart.delete(id);
   await addCartToServer();
@@ -1547,6 +1638,7 @@ async function removeSingleProductFromCart(id) {
 }
 
 async function loadCartFromserver() {
+  await db.cart.clear();
   let user_id = await db.userdetails.get(1);
   if (user_id == undefined) {
     return "";
@@ -2018,7 +2110,11 @@ async function getInvoiceDetails() {
   let discountVal = 0;
   let grandTotal = 0;
   let slotCharge = localStorage.getItem("delivery_slot_id");
+  let selectedSlotName = localStorage.getItem("selctedSlotname");
   let discount = localStorage.getItem("offer");
+
+  selectedSlotName != null ?  choosedSlot = selectedSlotName : choosedSlot = "Please Select Slot";
+   
 
   if (slotCharge != null) {
     slotCharge = slotCharge.split("--");
@@ -2027,11 +2123,13 @@ async function getInvoiceDetails() {
     slotCharge = 0;
   }
 
-  let total = data.reduce(
-    (sum, item) => sum + item.price * item.purchase_qty,
-    0
-  );
+  // let total = data.reduce(
+  //   (sum, item) => sum + item.price * item.purchase_qty,
+  //   0
+  // );
 
+  let total = Number((data.reduce((sum, item) => sum + (item.price * item.purchase_qty), 0)).toFixed(2));
+  // console.log(total);
   if (discount == null) {
     discountVal = 0;
   } else {
@@ -2040,7 +2138,8 @@ async function getInvoiceDetails() {
       discountVal = discount[1];
     }
     if (discount[2] == "percent") {
-      discountVal = total - total * discount[1] * 0.01;
+      // discountVal = total - total * discount[1] * 0.01;
+      discountVal = Number((total * discount[1] * 0.01).toFixed(2));
     }
   }
 
@@ -2080,9 +2179,13 @@ async function getInvoiceDetails() {
   });
   console.log(fakeTotal);
   console.log(total);
-  $("#savings").val(fakeTotal - total);
+  $('#selectedSlotName').html(selectedSlotName)
+  $("#savings").val((fakeTotal - total).toFixed(2));
 
-  $("#price-label").html(`Price ( items : ${data.length})`);
+  $("#Gross-Total").val(`${fakeTotal}`);
+  $('#GrossPrice').html(`Gross Price ( items : ${data.length})`)
+  $("#price-label").html(`Total ( items : ${data.length})`);
+  $("#TotalItems").html(`Grand Total ( items : ${data.length})`);
   $("#total-price").val(` ${total}`);
   $("#discount").val(` ${discountVal}`);
   $("#total-gst").val(`${totalGST}`);
@@ -2668,6 +2771,7 @@ function printAddressCheckout(data) {
   $("#cs-pincode").val(`${data.pincode}`);
   localStorage.setItem("address_id", data.id);
   $("#address-change").modal("hide");
+  $("#addressModal").modal("hide");
 }
 
 // load offers
@@ -2751,7 +2855,6 @@ async function loadOrderDetails(order_id) {
   let req = await fetch(appAPI, { method: "POST", body: formData });
   let res = await req.json();
   let data = res.data[0];
-
   $("#order-id").val(order_id);
 
   if (data.FULL_ADDRESS != null) {
@@ -2770,9 +2873,9 @@ async function loadOrderDetails(order_id) {
     $("#cs-full-addr").html(``);
   }
 
-  const products = data.products;
-
-  products.map((item) => {
+const products = data.products;
+console.log(products);
+  products.map((item) => { 
     $("#load_product_list_invoice").append(
       `
                 <div class="order-summry-pro-card">
@@ -2781,6 +2884,7 @@ async function loadOrderDetails(order_id) {
                     </div>
                     <div class="order-summry-pro-card-right">
                         <span class="os-pnm">${item.name}</span>
+                        <span class="os-pnm">Variant Name : ${item.type_name_1} , ${item.type_qty_1} , ${item.type_name_2} , ${item.type_qty_2}</span>
                         <span class="os-pr">price: ${item.price} , qty : ${
         item.qty
       } </span>
@@ -2796,7 +2900,7 @@ async function loadOrderDetails(order_id) {
   let total_price = products.reduce(
     (sum, item) => sum + item.price * item.qty,
     0
-  );
+  )
 
   if (data.offer_id == "null") {
     discount = 0;
@@ -2937,6 +3041,10 @@ function deliverySlotSelect(item) {
     "delivery_slot_id",
     `${item.id}--${item.amount}--${item.payment_type}`
   );
+  localStorage.setItem(
+    "selctedSlotname",
+    `${item.delivery_slot_name}`
+  );
   $("#delivery-slot").val(item.amount);
   $("#delviery-slot-modal").modal("hide");
   getInvoiceDetails();
@@ -2948,6 +3056,7 @@ function changeTakeaway(type = "") {
     $("#t-btn").addClass("cs-address-chooser-btn");
     getAddressonLoad();
     $("#getAddressBtn").show();
+    $("#getAddaddressBtn").show();
     $("#deliverySlotBtn").show();
     $("#dSBtn").attr("disabled", false);
     localStorage.removeItem("delivery_slot_id");
@@ -2957,6 +3066,7 @@ function changeTakeaway(type = "") {
     $("#t-btn").removeClass("cs-address-chooser-btn");
     $("#d-btn").addClass("cs-address-chooser-btn");
     $("#getAddressBtn").hide();
+    $("#getAddaddressBtn").hide();
     $("#deliverySlotBtn").hide();
     $("#dSBtn").attr("disabled", true);
     localStorage.setItem("delivery_slot_id", "0--0--0");
@@ -3080,8 +3190,10 @@ $("#address_submit_modal").submit(async function (e) {
     let data = res.data;
 
     if (data.status == 1) {
+      
       alert(data.msg);
-      location.reload();
+      $("[name=addpanelType]").val()  == "checkoutPanel" ? printAddressCheckout(data.lastaddress) :location.reload();
+
     } else {
       alert(data.msg);
     }
@@ -3201,11 +3313,18 @@ function onDeviceReady() {
   const scanBtnQR = document.getElementById("scanBtnQR");
   if (scanBtnQR) scanBtnQR.addEventListener("click", scanQR);
 
+  const scanBtnQR1 = document.getElementById("scanBtnQR1");
+  if (scanBtnQR1) scanBtnQR.addEventListener("click", scanQR);
+
+  const scanBtnQR2 = document.getElementById("scanBtnQR2");
+  if (scanBtnQR2) scanBtnQR.addEventListener("click", scanQR);
+
   function scanQR() {
     scan((QRtext) => {
       scanProduct(QRtext);
     });
   }
+
 }
 
 // download and print invoice
@@ -3520,7 +3639,19 @@ async function finalCheckout() {
           await db.cart.clear();
           await addCartToServer();
           localStorage.removeItem("not_available_products");
-          location.href = `invoice.html?id=${data.order_id}`;
+          localStorage.removeItem("offer");
+          if (localStorage.getItem("walletCalbal") != null) { 
+           
+            let walletDel = JSON.parse(localStorage.getItem("dynamicWallet")); 
+            localStorage.setItem("K_wallet", JSON.stringify({
+                wallet_code: walletDel.wallet_code,
+                walletBalance: 0,
+                walletstatus: "credit"
+            }));
+        }
+        
+        localStorage.removeItem('walletCalbal');
+        location.href = `invoice.html?id=${data.order_id}`;
         } else {
           alert(data.msg);
           localStorage.setItem(
@@ -3634,7 +3765,18 @@ async function finalCheckout() {
         await db.cart.clear();
         await addCartToServer();
         localStorage.removeItem("not_available_products");
-        location.href = `invoice.html?id=${data.order_id}`;
+        localStorage.removeItem("offer");
+        if (localStorage.getItem("walletCalbal") != null) { 
+           
+          let walletDel = JSON.parse(localStorage.getItem("dynamicWallet")); 
+          localStorage.setItem("K_wallet", JSON.stringify({
+              wallet_code: walletDel.wallet_code,
+              walletBalance: 0,
+              walletstatus: "credit"
+          }));
+      }
+         localStorage.removeItem('walletCalbal');
+         location.href = `invoice.html?id=${data.order_id}`;
       } else {
         alert(data.msg);
         localStorage.setItem(
@@ -3682,11 +3824,24 @@ function rightSideCartProductTemplate(item) {
 }
 
 function rightSideCartProductTotal(cartItem) {
+
   let total = 0;
   let totalFake = 0;
+
+
   cartItem.forEach((item) => {
-    total = total + parseInt(item.price) * item.purchase_qty;
-    totalFake = totalFake + parseInt(item.fprice) * item.purchase_qty;
+    // total = total + parseInt(item.price) * item.purchase_qty;
+    // totalFake = totalFake + parseInt(item.fprice) * item.purchase_qty;
+    
+    total +=  Number((item.price * item.purchase_qty).toFixed(2));
+    
+    // bug test for NaN
+    // console.log(item.fprice);
+
+    let x = typeof Number((item.fprice * item.purchase_qty).toFixed(2)) == NaN ? 0 : Number((item.fprice * item.purchase_qty).toFixed(2)) ;
+
+    totalFake += x;
+
   });
   return `
     <div class="checkout-heading">
@@ -3696,7 +3851,7 @@ function rightSideCartProductTotal(cartItem) {
       <div class="checkout-box1">
         <i class="bi bi-receipt"></i>
         <p>item total</p>
-        <span>saved ₹ ${totalFake - total}</span>
+        <span>saved ₹ ${(totalFake - total).toFixed(2)}</span>
       </div>
       <div class="checkout-box1 two-box">
         <p><del>₹${totalFake}</del>₹${total}</p>
@@ -3714,18 +3869,13 @@ function rightSideCartProductTotal(cartItem) {
     <div class="img-design"></div>
     <div class="contents-cart">
       <p>Your total savings</p>
-      <b>₹${totalFake - total}</b>
+      <b>₹${(totalFake - total).toFixed(2)}</b>
     </div>
   `;
 }
 
-function rightSideCartAddressBox() {
-  let addressType = "Home";
-  let address = "Floor R, R Pocket 25, Sector 3, Rohini, Delhi";
-  return `
-    <div class="cart-footer">
-      <div class="ListStrip__Container-sc-kstnas-0 giXgxn proceed">
-        <i class="bi bi-geo"></i>
+
+/* <i class="bi bi-geo"></i>
         <div class="ListStrip__TextContainer-sc-kstnas-2 jyJtWQ">
           <div class="ListStrip__Heading-sc-kstnas-3 hykDMK">
             Delivering to ${addressType}
@@ -3733,11 +3883,14 @@ function rightSideCartAddressBox() {
           <div class="ListStrip__SubHeading-sc-kstnas-4 dfqXLv proceed-add">
             ${address}
           </div>
-        </div>
-        <div class="ListStrip__ActionContainer-sc-kstnas-5 cKgewK proceed-add2">
-            
-        </div>
-      </div>
+        </div> */
+
+function rightSideCartAddressBox() {
+  // let addressType = "Home";
+  // let address = "Floor R, R Pocket 25, Sector 3, Rohini, Delhi";
+  return `
+    <div class="cart-footer">
+      
       <a href="checkout.html">
         <button>
           Proceed to checkout<i
@@ -3757,9 +3910,44 @@ function rightSideCartNoProduct() {
     `;
 }
 
-function rightSideCartTopMsg() {
-  let msg_title = "Delivery in 8 minutes";
-  let msg_body = "Shipment of 1 item";
+// function rightSideCartTopMsg() {
+//   let msg_title = "Delivery in 8 minutes";
+//   let msg_body = "Shipment of 1 item";
+//   return `
+//     <div class="cart-header">
+//       <div class="cart-header-img">
+//         <img src="assets/img/cart.png" alt="" />
+//       </div>
+//       <div class="cart-header-text">
+//         <p>${msg_title}</p>
+//         <small>${msg_body}</small>
+//       </div>
+//     </div>
+//   `;
+// }
+
+async function bringtopmsg(){
+  const formData = new FormData();
+  formData.append("type", "134");
+  let req = await fetch(appAPI, { method: "POST", body: formData });
+  let data = await req.json();
+  localStorage.setItem("headerMsg", data.tbl_value);
+  // return JSON.parse(data.tbl_value);
+}
+
+ function rightSideCartTopMsg() {
+
+  const getmsg = localStorage.getItem("headerMsg");
+  // if(getmsg == null){
+  //   printMsg = bringtopmsg();
+  //   console.log("inside"+printMsg.First_Msg);
+  // }else{
+  //   printMsg = JSON.parse(getmsg);
+  // }
+  const printMsg = JSON.parse(getmsg);
+  let msg_title = printMsg.First_Msg;
+  let msg_body = printMsg.Sec_Msg;
+ 
   return `
     <div class="cart-header">
       <div class="cart-header-img">
@@ -3814,7 +4002,7 @@ async function updateWhishlist(item, thisElem) {
 // cart functions
 
 async function updateQtyDb(item, prqty) {
-  if (prqty == 0) {
+  if (prqty == 0) { 
     await removeSingleProductFromCart(item.id);
   } else {
     let x = await db.cart.update(item.id, { purchase_qty: prqty });
@@ -3823,7 +4011,7 @@ async function updateQtyDb(item, prqty) {
   }
 }
 
-async function updateQty(item, type) {
+async function updateQty(item, type) {  
   let availableQty = parseInt(item.qty);
   let purchaseQty = parseInt($(`.pr_${item.id}`).val());
   if (availableQty <= 0) {
@@ -3832,7 +4020,7 @@ async function updateQty(item, type) {
   }
   if (type === "minus") {
     if (purchaseQty > 0) {
-      purchaseQty--;
+       purchaseQty--;
       await updateQtyDb(item, purchaseQty);
     }
   } else if (type === "plus") {
@@ -3844,9 +4032,9 @@ async function updateQty(item, type) {
       await updateQtyDb(item, purchaseQty);
     }
   }
-  if (purchaseQty === 0) {
-    removeSingleProductFromCart(item.id);
-  }
+  // if (purchaseQty === 0) { console.log("purchaseQty"+ purchaseQty);
+  //   removeSingleProductFromCart(item.id);
+  // }
   $(`.pr_${item.id}`).val(purchaseQty);
 
   rightSideCartLoad();
@@ -3979,13 +4167,14 @@ function productCardTemplate(item, variant_status = true) {
     `;
 }
 
-function navOneTemplate() {
+  function navOneTemplate() {
   // loginCheck();
 
   let login_status = localStorage.getItem("K_status");
   let data = localStorage.getItem("navData");
   data = JSON.parse(data);
-
+  
+  if (data == null) getUrlTableSync();
   let htmlStr = '';
   data.forEach( item => {
     if( item.name.length != 0 )
@@ -4000,6 +4189,10 @@ function navOneTemplate() {
   if (login_status == 1) {
     const name = localStorage.getItem("K_name") || "";
     const mobile = localStorage.getItem("K_mobile") || "";
+    // const walletAmt = localStorage.getItem("walletAMT") || "";
+    // const walletCode = localStorage.getItem("walletCODE") || ""
+    const wallet = JSON.parse(localStorage.getItem("K_wallet")) || "";
+   
     return `
             <div class="navbar">
                 <div class="nav1">
@@ -4015,6 +4208,23 @@ function navOneTemplate() {
                 </div>
             </div>
             <div class="navbar2">
+                 <div class="wallet-nav">
+            <div class="wallet-nav-detail">
+              <div class="wallet-div1">
+                <p>Wallet</p>
+                <p>₹${wallet.walletBalance}</p>
+              </div>
+              <i onclick="sharecode()" class="bi bi-share-fill"></i>
+            </div>
+              <div class="wallet-refer-div">
+                <div class="cover-wallet">     
+                <span>Refer Code :</span>
+                <input id= "myreferel" value="${ wallet.wallet_code }" readonly>
+                </div>
+                <button class="btn btn-success" onclick="copyreferalcode()">Copy</button>
+              </div>
+            </div>
+                
                 <a href="home.html"
                     ><i class="bi bi-house"></i>
                     <p>Home</p>
@@ -4031,7 +4241,9 @@ function navOneTemplate() {
                     ><i class="bi bi-house-door"></i>
                     <p>Address</p>
                 </a>
+
                 ${htmlStr}
+
                 <a href="#" onclick="logoutUser()"
                     ><i class="bi bi-box-arrow-right"></i>
                     <p>logout</p>
@@ -4051,15 +4263,15 @@ function navOneTemplate() {
                 </div>
             </div>
             <div class="navbar2">
+                <a href="../login.html"
+                    ><i class="bi bi-box-arrow-right"></i>
+                    <p>not login ? click here</p>
+                </a>
                 <a href="home.html"
                     ><i class="bi bi-house"></i>
                     <p>Home</p>
                 </a>
                 ${htmlStr}
-                <a href="../login.html"
-                    ><i class="bi bi-box-arrow-right"></i>
-                    <p>not login ? click here</p>
-                </a>
             </div>`;
   }
 }
@@ -4071,7 +4283,7 @@ function bottomNavTemplate(activePage) {
             <i class="bi bi-house"></i>
             <span>Home</span>
         </a>
-        <a href="Wishlist.html" 
+        <a href="wishlist.html" 
             class="${activePage === "wishlist" ? "active-class" : ""}">
             <i class="bi bi-heart"></i>
             <span>wishlist</span>
@@ -4081,7 +4293,7 @@ function bottomNavTemplate(activePage) {
             <i class="bi bi-bag-check"></i>
             <span>My Order</span>
         </a>
-        <a href="Setting.html" 
+        <a href="setting.html" 
             class="${activePage === "profile" ? "active-class" : ""}">
             <i class="bi bi-person"></i>
             <span>Profile</span>
@@ -4090,7 +4302,6 @@ function bottomNavTemplate(activePage) {
 }
 
 function categoryCardTemplate(item) {
-  // sweety
   return `
         <div class="category-box" onclick="gotoProductListUseCategory(${
           item.id
@@ -4144,7 +4355,8 @@ function discountPrecentCalculator(discountedPrice, originalPrice) {
   ) {
     const discountPercentage =
       ((originalPrice - discountedPrice) / originalPrice) * 100;
-    return discountPercentage.toFixed(2);
+    // return discountPercentage.toFixed(2);
+    return Math.ceil(discountPercentage);
   }
 }
 
@@ -4202,31 +4414,24 @@ function productImageSlider(data) {
   window.addEventListener("resize", slideImage);
 }
 
-async function singleProdTempl(data) {
+async function singleProdTempl(data) { 
+  // if ( data == undefined ) await getUrlTableSync();
   let db_pr_qty = await db.cart.get(data.id);
+  let getQty = await db.products.get(data.id);
+  let getAddedwishlist = await db.wishlist.get(data.id);
+  let getCartItem = await db.cart.get(data.id);
+      
+
+  loadWishlisticon = getAddedwishlist == undefined ? `<i class="bi bi-heart"></i>` :` <i class="bi bi-heart-fill" style="color:red"></i>`;
+
+  wishlist_status = getAddedwishlist == undefined ? 0 : 1 ;
+  purchase_qty = getCartItem == undefined  ?  0 : 1 ; 
+ 
+
+  data = { ...data, wishlist_status : wishlist_status , purchase_qty : purchase_qty}
+
   db_pr_qty = db_pr_qty == undefined ? 0 : db_pr_qty.purchase_qty;
-
-  let images = data.imgs.map((image, i) => ({
-    id: i + 1,
-    img: imgLink + image,
-  }));
-  productImageSlider(images);
-
-  $("#category_name").html(` ${data.cat_nm ? data.cat_nm : ""} `);
-  $("#product-desc").html(` ${data.description} `);
-  $("#prod-name").html(` ${data.product_nm} `);
-  $("#price").html(` &#8377; ${data.price} `);
-  $("#fprice").html(` &#8377; ${data.fprice} `);
-
-  $("#discout_percent").html(`
-        ${discountPrecentCalculator(data.price, data.fprice)}% OFF
-    `);
-
-  if (data.type_qty_1 != "") {
-    $("#type_1_val").html(` ${data.type_qty_1} ${data.type_name_1} `);
-  }
-
-  $("#addToCartSP").html(`
+  instock = `
         <span>
             <button onclick='buyNow(${JSON.stringify(data)})'> Buy Now </button>
         </span>
@@ -4241,7 +4446,56 @@ async function singleProdTempl(data) {
                   data
                 )})'>+</button>
         </div>
+    `;
+  outofstock = `
+        <span>
+            <button onclick='alert("Product Out of Stock")'> Out Of Stock </button>
+        </span>
+        
+    `;
+  
+  let images = data.imgs.map((image, i) => ({
+    id: i + 1,
+    img: imgLink + image,
+  }));
+  productImageSlider(images);
+
+  $("#category_name").html(` ${data.cat_nm ? data.cat_nm : ""} `);
+  $("#product-desc").html(` ${data.description} `);
+  $("#prod-name").html(` ${data.product_nm} `);
+  $("#price").html(` &#8377; ${data.price} `);
+  $("#fprice").html(` &#8377; ${data.fprice} `);
+  $("#wishlistIcon").html(loadWishlisticon);
+  $("#wishlistIcon").click(function() {
+    updateWhishlist(data,this);
+});
+
+  $("#discout_percent").html(`
+        ${discountPrecentCalculator(data.price, data.fprice)}% OFF
     `);
+
+  if (data.type_qty_1 != "") {
+    $("#type_1_val").html(` ${data.type_qty_1} ${data.type_name_1} `);
+  }
+
+  getQty.qty == 0 ? $("#addToCartSP").html(outofstock) :  $("#addToCartSP").html(instock);
+
+  // $("#addToCartSP").html(`
+  //       <span>
+  //           <button onclick='buyNow(${JSON.stringify(data)})'> Buy Now </button>
+  //       </span>
+  //       <siv class="cart-buttons add-product-btn">
+  //           <button class="minus" onclick='decreaseQty(${JSON.stringify(
+  //             data
+  //           )})'>-</button>
+  //           <input type="text" class="pr_${data.id}"
+  //               value="${db_pr_qty}" 
+  //               class="pr${data.id}">
+  //               <button class="plus" onclick='increaseQty(${JSON.stringify(
+  //                 data
+  //               )})'>+</button>
+  //       </div>
+  //   `);
 
   // load more variant section
 
@@ -4289,7 +4543,7 @@ async function rightSideCartLoad() {
   if (cartItems.length > 0) {
     cartItems.forEach((item) => {
       item.qty = productMap.get(item.id) || 0;
-    });
+    }); 
     htmlContent += rightSideCartTopMsg();
     htmlContent += cartItems
       .map((item) => rightSideCartProductTemplate(item))
@@ -4414,9 +4668,9 @@ async function loadBanner() {
 
 // load navbar
 
-function loadNav(activePage) {
-  $("#navone").html(navOneTemplate());
-  $("#navtwo").html(bottomNavTemplate(activePage));
+async function loadNav(activePage) {
+   $("#navone").html(navOneTemplate());
+   $("#navtwo").html(bottomNavTemplate(activePage));
 }
 
 // load single product
@@ -4445,8 +4699,9 @@ async function loadSingleProduct() {
 
   if (id === null) {
     return undefined;
-  } else {
-    let data = await db.products.get(`${id}`);
+  } else { 
+    let data = await db.products.get(`${id}`); 
+     if ( data == undefined ) await getUrlTableSync();
     singleProdTempl(data);
 
     let recentPro = JSON.parse(sessionStorage.getItem("recentPro")) || [];
@@ -4596,23 +4851,47 @@ async function addToCart(item) {
 
 // all product page
 
-async function loadcatgSlider() {
+async function loadcatgSlider() { 
+
+  
   let ctid = localStorage.getItem("ctid");
   let data = [];
 
-  if (ctid === null || ctid == 0) {
-    data = await db.categories.where("parent_id").equals("0").toArray();
+  if (getUrlID("cid") != null) {
+    if (getUrlID("cid").length > 0) {
+      localStorage.setItem("cid", getUrlID("cid"));
+      localStorage.setItem("ctid", getUrlID("cid"));
+      id = localStorage.getItem("ctid");
+      ctid = localStorage.getItem("ctid");
+    }
   } else {
+      localStorage.setItem("cid", 0);
+      localStorage.setItem("ctid", 0);
+      id = localStorage.getItem("ctid");
+      ctid = localStorage.getItem("ctid");
+  }
+
+
+
+  if (ctid === null || ctid == 0) { 
+    data = await db.categories.where("parent_id").equals("0").toArray();
+  } else { console.log(ctid , id);
     data = await db.categories.where("parent_id").equals(ctid).toArray();
+    console.log("length",data.length);
+    if(data.length == 0) await getUrlTableSync();
+    console.log(data);
+
     let main_catg = await db.categories.where("id").equals(ctid).toArray();
+    console.log(main_catg);
     main_catg = main_catg[0];
-    $("#main_catg_name").html(`${main_catg.name}`);
-    $("#main_catg_img").attr("src", imgLink + main_catg.images);
+    $("#main_catg_name").html(`Back`);
+    $("#main_catg_img").attr("src", `assets/img/back.png`);
     $("#main_catg_div").attr(
       "onclick",
       "gotoProductListUseCategory(" + main_catg.parent_id + ")"
     );
   }
+
 
   let catgContainer = $("#catgContainer");
 
@@ -4743,6 +5022,14 @@ async function loadProductAllProduct() {
   let data = [];
   let id = localStorage.getItem("cid");
 
+  if (getUrlID("cid") != null) {
+    if (getUrlID("cid").length > 0) {
+      localStorage.setItem("cid", getUrlID("cid"));
+      localStorage.setItem("ctid", getUrlID("cid"));
+      id = localStorage.getItem("cid");
+    }
+  }
+
   if (id !== null) {
     data = await loadCategoryOnId(id);
   } else {
@@ -4763,7 +5050,7 @@ async function loadProductAllProduct() {
   const cartMap = new Map(
     cartItem.map((item) => [item.var_id, item.purchase_qty])
   );
-
+ 
   data = data.map((item) => ({
     ...item,
     wishlist_status: wishlistMap.has(item.id) ? 1 : 0,
@@ -4786,7 +5073,7 @@ async function loadProductAllProduct() {
     .join("");
 
   $("#loadAllProduct").append(productCards);
-  localStorage.removeItem("cid");
+  // localStorage.removeItem("cid");
 }
 
 function getUrlID(name = "id") {
@@ -4801,13 +5088,117 @@ function deleteMyAccount() {
 // new code
 
 loadSettingData();
-loadextrapages();
 
-async function loadextrapages() {
-  const formdata = new FormData();
-  formdata.append("type", "119");
-  const req = await fetch(appAPI, { method: "POST", body: formdata });
-  const res = await req.json();
-  data = res.data;
-  localStorage.setItem("navData" , JSON.stringify(data));
+(async function(){
+  if ( localStorage.getItem("navData") == null ) {
+    const formdata = new FormData();
+    formdata.append("type", "119");
+    const req = await fetch(appAPI, { method: "POST", body: formdata });
+    const res = await req.json();
+    data = res.data;
+    localStorage.setItem("navData" , JSON.stringify(data));
+  }
+  if(localStorage.getItem("K_status")== "1" && localStorage.getItem("K_type" == "1")){
+      
+    await loadCartFromserver();
+    await loadCartCount();
+  }
+})();
+
+function check_login(){
+
+  if(localStorage.getItem("K_type") !== "1" && localStorage.getItem("K_status") !== "1"){
+      location.href = "../login.html" ;
+  }
+
+}
+
+
+async function loadwalletdata(){
+
+  const k_id = localStorage.getItem("K_id");
+  if(k_id != null){
+    const formdata = new FormData();
+    formdata.append("type", "123");
+    formdata.append("id", k_id);
+    const req = await fetch(appAPI, { method: "POST", body: formdata });
+    const res = await req.json();
+    data =JSON.parse(res.wallet) ;
+    // console.log(data);
+    if(data.wallet_code == ''|| res.wallet == 0){
+       $("#setrefercode").removeClass("d-none"); 
+    }
+    
+    localStorage.setItem("walletCODE",data.wallet_code);
+    localStorage.setItem("walletAMT",data.walletBalance);
+    // localStorage.setItem("K_wallet",res.wallet);
+  // $("#walletCode").val(data.wallet_code);
+  // // $("#walletbal").val(data.walletBalance);
+  // $("#walletbal").html(data.walletBalance);
+  }
+  
+
+}
+
+// const generateRandomCode = (length) => {
+//           const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+//           let code = '';
+
+//           for (let i = 0; i < length; i++) {
+//               const randomIndex = Math.floor(Math.random() * characters.length);
+//               code += characters[randomIndex];
+//           }
+
+//           return code;
+//       }
+//       const generateCode = () => {
+//           randomcode = generateRandomCode(6);
+//           $("#refercodegen").val(randomcode);
+//       }
+
+
+
+//       $("#setrefercode").on("submit",async function(e){
+//             e.preventDefault();
+//             const k_id = localStorage.getItem("K_id");
+//             const formdata = new FormData(this);
+//             formdata.append("type", "131");
+//             formdata.append("id", k_id);
+//             const req = await fetch(appAPI, { method: "POST", body: formdata });
+//             const res = await req.json();
+//             console.log(res);
+//             alert(res.data.msg);
+//             location.reload();
+//       })
+
+      function sharecode(){
+       
+        getCode = $("#walletCode").val();
+        window.plugins.socialsharing.share('Download App from playstore. Use code at signup for exicting offers. CODE -'+getCode, null, null, 'https://play.google.com/store/apps/details?id='+appID);
+      }
+
+
+
+      function copyreferalcode() {
+    
+        var copyText = document.getElementById("myreferel");
+        // var copyText2 = copyText.innerHTML;
+    
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); // For mobile devices
+      
+         // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText.value);
+        alert("Code Copied");
+        
+      }
+
+async function getUrlTableSync(){
+  
+  let data = await db.tablecheck.toArray();
+  if (data.length == 0) {
+    await TableSync();
+    //  alert();
+    location.reload();
+  }
 }

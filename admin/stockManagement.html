@@ -315,11 +315,14 @@
           if ($("#stockcheck").is(":checked")) {
             newStockval = parseInt(oldqty) - parseInt(newqty);
 
-            newsqty = parseInt(oldsqty) - parseInt(newqty);
+            // newsqty = parseInt(oldsqty) - parseInt(newqty);
+            newsqty = oldsqty;
+
           } else {
             newStockval = parseInt(oldqty) + parseInt(newqty);
 
-            newsqty = parseInt(oldsqty) + parseInt(newqty);
+            // newsqty = parseInt(oldsqty) + parseInt(newqty);
+            newsqty = oldsqty;
           }
         }
 

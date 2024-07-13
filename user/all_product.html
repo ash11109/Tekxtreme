@@ -86,8 +86,8 @@
         <div class="header-search">
           <div class="last-header">
             <i class="bi bi-search"></i>
-            <input type="text" placeholder="Search “Grocery” " />
-            <i class="bi bi-upc-scan"></i>
+            <input type="text" placeholder="Search “Grocery” "  onclick="gotoProductSrch()"/>
+            <i class="bi bi-upc-scan"  id="scanBtnQR"></i>
           </div>
           <!-- Button trigger modal -->
           <button
@@ -191,17 +191,19 @@
                     class="btn btn-light btn-but rounded-pill"
                     onclick="filterProduct(this,'SortByNameA_Z')"
                   >
-                    Sort by name (A-Z)
-                    <input type="radio" name="sortOption" />
-                  </button>
+                  <label for="one">Sort by name (A-Z)</label>
+
+                  <input name="sortOption" type="radio" id="one" value="one">
+                                  </button>
                 </div>
                 <div class="Wrapper-body-item">
                   <button
                     class="btn btn-light btn-but rounded-pill"
                     onclick="filterProduct(this,'SortByNameZ_A')"
                   >
-                    Sort by name (Z-A)
-                    <input type="radio" name="sortOption" />
+                  <label for="two">Sort by name (Z-A)</label>
+                                    <input name="sortOption" type="radio" id="two" value="two">
+                                    
                   </button>
                 </div>
                 <div class="Wrapper-body-item">
@@ -209,17 +211,19 @@
                     class="btn btn-light btn-but rounded-pill"
                     onclick="filterProduct(this,'SortByPriceL_H')"
                   >
-                    Sort by price ( low - high )
-                    <input type="radio" name="sortOption" />
-                  </button>
+                  <label for="three">Sort by price ( low - high )</label>
+                  <input name="sortOption" type="radio" id="three" value="three">
+                                    </button>
                 </div>
                 <div class="Wrapper-body-item">
                   <button
                     class="btn btn-light btn-but rounded-pill"
                     onclick="filterProduct(this,'SortByPriceH_L')"
                   >
-                    Sort by price ( high -low )
-                    <input type="radio" name="sortOption" />
+                  <label for="four">Sort by price ( high -low )
+                  </label>
+                  <input name="sortOption" type="radio" id="four" value="four">
+               
                   </button>
                 </div>
               </div>
@@ -252,6 +256,7 @@
     <script src="assets/js/script.js"></script>
 
   <script>
+
     printShopName();
     rightSideCartLoad();
     loadNav("home");

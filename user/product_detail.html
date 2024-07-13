@@ -23,7 +23,7 @@
         </div>
         <div class="head2">
           <a href="cart.html">
-            <i class="bi bi-cart-fill"></i> <span><b>2</b></span>
+            <i class="bi bi-cart-fill"></i> <span ><b id="cart-count-link"></b></span>
           </a>
         </div>
       </div>
@@ -54,7 +54,7 @@
             <i class="bi bi-cart-fill"></i>
             <span>
               <b>
-                <span id="cart-count-link"></span>
+                <span id=""></span>
               </b>
             </span>
           </div>
@@ -83,14 +83,14 @@
       </div>
       <div class="last-header product-select">
         <i class="fa-solid fa-magnifying-glass"></i>
-        <input type="text" placeholder="Search “Grocery” " />
-        <i class="bi bi-upc-scan"></i>
+        <input type="text" placeholder="Search “Grocery” " onclick="gotoProductSrch()" />
+        <i class="bi bi-upc-scan" id="scanBtnQR1"></i>
       </div>
       <div class="header-search">
         <div class="last-header">
           <i class="bi bi-search"></i>
-          <input type="text" placeholder="Search “Grocery” ">
-          <i class="bi bi-upc-scan"></i>
+          <input type="text" placeholder="Search “Grocery” " onclick="gotoProductSrch()" />
+          <i class="bi bi-upc-scan" id="scanBtnQR2"></i>
         </div>
 
       </div>
@@ -107,8 +107,8 @@
         <div class="card-wrapper product-wrapper">
           <div class="card-wrap-2">
             <div class="product-imgs">
-              <span clas="detail-wishlist">
-                <i class="bi bi-heart"></i>
+              <span clas="detail-wishlist" id="wishlistIcon">
+                
               </span>
               <div class="img-display">
                
@@ -203,10 +203,12 @@
   <script src="assets/js/script.js"></script>
 
   <script>
+
     printShopName();
     rightSideCartLoad();
     loadNav("home");
     loadSingleProduct();
+    loadCartCount();
   </script>
 
 </body>

@@ -110,12 +110,12 @@
   <script src="user/assets/js/app.js"></script>
   <script>
     updateCheck();
-
+    // loadextrapages();
     async function loadTableSync() {
       await TableSync();
       setTimeout(() => (location.href = "user/home.html"), 1500);
       checkLogin();
-    }
+    }                       
 
     async function updateCheck() {
       const formdata = new FormData();
@@ -170,10 +170,10 @@
       start = end;
     };
 
-    setTimeout(() => progressVal(25), 3000);
-    setTimeout(() => progressVal(50), 6000);
-    setTimeout(() => progressVal(75), 9000);
-    setTimeout(() => progressVal(100), 12000);
+    // setTimeout(() => progressVal(25), 3000);
+    // setTimeout(() => progressVal(50), 6000);
+    // setTimeout(() => progressVal(75), 9000);
+    // setTimeout(() => progressVal(100), 12000);
   </script>
 </body>
 

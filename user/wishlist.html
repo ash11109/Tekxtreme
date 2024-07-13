@@ -40,7 +40,8 @@
             <i class="bi bi-cart4"></i>
             <span>
               <b>
-                <span id="cart_item_d">0</span>
+                <!-- <span id="cart_item_d">0</span> -->
+                <span id="cart-count">0</span>
                 items
               </b>
             </span>
@@ -51,7 +52,8 @@
             <i class="bi bi-cart-fill"></i>
             <span>
               <b>
-                <span id="cart_item_m">0</span>
+                <!-- <span id="cart_item_m">0</span> -->
+                <span id="cart-count-link">0</span>
               </b>
             </span>
           </div>
@@ -103,10 +105,12 @@
   <script src="assets/js/script.js"></script>
 
   <script>
+    check_login();
     printShopName();
     rightSideCartLoad();
     loadNav("wishlist");
     loadWishlist();
+    loadCartCount();
   </script>
 </body>
 

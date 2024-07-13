@@ -34,7 +34,8 @@
                 <i class="bi bi-cart4"></i>
                 <span>
                   <b>
-                    <span id="cart_item1">0</span>
+                    <!-- <span id="cart_item1">0</span> -->
+                    <span id="cart-count">0</span>
                     items
                   </b>
                 </span>
@@ -45,7 +46,8 @@
                 <i class="bi bi-cart-fill"></i>
                 <span>
                   <b>
-                    <span id="cart_item1">0</span>
+                    <!-- <span id="cart_item1">0</span> -->
+                    <span id="cart-count-link">0</span>
                   </b>
                 </span>
               </div>
@@ -128,6 +130,7 @@
                   </span>
                 </div>
 
+                <input type="text" name="addpanelType" value="addresspanel" hidden />
                 <input type="text" name="address_id" hidden />
                 <input type="text" placeholder="Full Name" name="name" />
                 <input type="text" placeholder="Address" name="full_address" />
@@ -165,9 +168,11 @@
     <script src="assets/js/app.js"></script>
     <script src="assets/js/script.js"></script>
     <script>
+      check_login();
       printShopName();
       rightSideCartLoad();
       loadNav("");
+      loadCartCount();
     </script>
     <script>
       loadUserAddress();

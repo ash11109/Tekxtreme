@@ -3033,3 +3033,17 @@ margin: auto;
 #setnotification .inputAsh{
     height: 51px;
 }
+
+
+.invoice-img{
+  width: 83px;
+margin: auto;
+padding: 8px;
+
+}
+.invoice-img img{
+width:100%;
+height: 100%;
+  object-fit: cover;
+
+}

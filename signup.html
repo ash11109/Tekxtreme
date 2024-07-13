@@ -190,7 +190,7 @@
 
         const res = await req.json();
         data = JSON.parse(res.tbl_key);
-        // console.log(data);
+        console.log(data);
         localStorage.setItem("referVal", data.referVal);
         localStorage.setItem("referVal2", data.referVal2);
         localStorage.setItem("refer_means", data.refer_means);

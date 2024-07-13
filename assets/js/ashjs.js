@@ -55,6 +55,16 @@ $(document).ready(function () {
           $("#msg").html("");
         }, 4000);
 
+
+       if ( data.wallet == 0 ){
+
+         a = await addCode(data.id);
+         console.log(a.string);
+         data.wallet = a.string;
+       }
+
+
+        const navData = localStorage.getItem('navData');
         localStorage.clear();
         localStorage.setItem("K_type", data.type);
         localStorage.setItem("K_id", data.id);
@@ -66,6 +76,7 @@ $(document).ready(function () {
         localStorage.setItem("K_renewal_date", data.renewal_date);
         localStorage.setItem("K_wallet", data.wallet);
         localStorage.setItem("roleList", data.role_list);
+        localStorage.setItem("navData" , navData);
 
         if (data.type == 1) {
           location.href = "user/home.html";
@@ -101,7 +112,9 @@ $(document).ready(function () {
 });
 
 const logout = () => {
+  const navdata = localStorage.getItem('navData');
   localStorage.clear();
+  localStorage.setItem('navData',navdata);
   location.href = "../login.html";
 };
 
@@ -207,6 +220,37 @@ function clearLocalstorage() {
 
 //   data = data.data;
 // }
+
+const generateRandomCode = (length) => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let code = '';
+
+  for (let i = 0; i < length; i++) {
+      const randomIndex = Math.floor(Math.random() * characters.length);
+      code += characters[randomIndex];
+  }
+
+  return code;
+}
+
+async function addCode (id) {
+   let RandomCode = generateRandomCode(6);
+
+   const formData = new FormData();
+
+   formData.append("type", "135");
+
+   formData.append("id", id);
+
+   formData.append("RandomCode", RandomCode);
+
+   let req = await fetch(appAPI, { method: "POST", body: formData });
+
+   let data = await req.json();
+    
+   return data.data; 
+
+}
 
 async function disableProduct(id, status) {
   if (confirm("are you sure?")) {
@@ -1628,7 +1672,7 @@ $("#signupFrm").on("submit", async function (e) {
         localStorage.setItem("K_address", "");
         localStorage.setItem("K_mobile", res.mobile);
         localStorage.setItem("K_email", res.email);
-        localStorage.setItem("K_wallet", 0);
+        localStorage.setItem("K_wallet", res.wallat);
         location.href = "user/home.html";
       }, 4000);
     } else {
@@ -2918,6 +2962,7 @@ async function loadOrderDetails(order_id, user_id) {
               </div>
               <div class="order-summry-pro-card-right">
                   <span class="os-pnm">${item.name}</span>
+                  <span class="os-pnm">Variant Name : ${item.type_name_1} , ${item.type_qty_1} , ${item.type_name_2} , ${item.type_qty_2}</span>
                   <span class="os-pr">price: ${item.price} , qty : ${item.qty
       } </span>
               </div>

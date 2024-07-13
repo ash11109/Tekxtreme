@@ -11,6 +11,91 @@
     <link rel="stylesheet" href="../assets/css/owl.carousel.min.css" />
     <link rel="stylesheet" href="../assets/css/owl.theme.default.min.css" />
     <link rel="stylesheet" href="assets/css/app.css" />
+    <style>
+      *{
+          margin: 0%;
+          padding: 0%;
+          box-sizing: border-box;
+      }
+      body{
+          width: 100%;
+          height: 100%;
+      }
+      .main-wallet{
+          width: 100%;
+          height: 100%;
+      }
+      .wallet{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  /* padding: 4rem 2rem; */
+  gap: 24px;
+      }
+      .wallet-box{
+          width: 304px;
+  height: 181px;
+  display: flex;
+  align-items: center;
+  background: #05ff057d;
+  justify-content: center;
+  flex-direction: column;
+  border-radius: 20px;
+  color: #fff;
+  gap: 17px;
+      }
+      .head-wallet{
+          position: fixed;
+          width: 100%;
+          box-shadow: 2px 2px 3px gray;
+      }
+      .referal-code{
+          display: flex;
+  border: 1px solid #c2c1c1;
+  padding: 8px 17px;
+  align-items: center;
+  gap: 3px;
+  border-radius: 9px;
+      }
+      .referal-code p{
+          white-space: nowrap;
+      }
+      .referal-code button{
+          background: orange;
+  border: none;
+  padding: 5px 15px;       
+      }
+      .referal-code input{
+          all: unset;
+  background: #fff;
+  /* box-shadow: inset 2px 2px 2px #c4c4c4; */
+  padding: 10px 3px;
+  width: 100px;
+  text-align: center;
+      }
+      .head-wallet{
+          padding: 10px 15px;
+      }
+      .share svg{
+          color: #fff;
+          position: absolute;
+          left: 113px;
+          top: -4px;
+      }
+      .wallet-box p{
+          font-size: 31px;
+      }
+      .wallet-box h2{
+          font-size: 35px;
+      }
+      .share{
+          position: relative;
+      }
+      .bg{
+          width: 297px;
+      }
+  </style>
 </head>
 
 
@@ -34,7 +119,7 @@
 
           <!-- top section end  -->
 
-          <div class="cart-container other">
+          <!-- <div class="cart-container other">
               <h2 id="page-title">Wallet/ Refer & Earn</h2>
               <hr>
               <div id="page-data">
@@ -63,7 +148,45 @@
 
               <input class="btn btn-primary" type="submit">
             </form>
+          </div> -->
+
+
+        <!-- new html for wallet -->
+        <div class="wallet">
+          <div class="wallet-box">
+              <p>Wallet balance</p>
+              <h2 id="walletbal">₹ 0/-</h2>
+              <div class="share">
+              <!-- <a href=""> -->
+                  <svg onclick="sharecode()" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-share-fill" viewBox="0 0 16 16">
+                      <path d="M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5"></path>
+                    </svg>
+              <!-- </a> -->
           </div>
+          </div>
+          <div class="referal-code">
+             <p>referal-code</p>
+              <input type="text" id="walletCode" value="" readonly>
+              <!-- <button>copy</button> -->
+          </div>
+
+         <form class="form-control d-none" id="setrefercode">
+          <div class="referal-code">
+            <p>Generate Refer Code</p>
+             <input type="text" id = "refercodegen" name="refercodegen" value="" readonly>
+             <button type="button" id="button-addon2" onclick="generateCode()">Generate Code</button>
+         </div>
+         <input class="btn btn-primary" type="submit">
+        </form>
+          <img class="bg" src="https://tuitionpad.com/wp-content/uploads/2020/08/refer11.png" alt="">
+        </div>
+          <!-- <div class="main-wallet">
+            <div class="head-wallet">
+                Wallet
+            </div>
+          
+        </div> -->
+
 
       </div>
           </div>
@@ -74,7 +197,7 @@
  <!-- ash top and body end -->
 
   <!-- ash bottom navigation start -->
-  <nav class="bottomNav">
+  <!-- <nav class="bottomNav">
     <ul>
       <li>
         <a href="notification.html" class="nav-link">
@@ -101,9 +224,9 @@
         </a>
       </li>
     </ul>
-  </nav>
+  </nav> -->
   <!-- ash bottom navigation end -->
-
+  <script src="../cordova.js"></script>
   <script src="../assets/js/jquery-3.6.1.js"></script>
   <script src="../assets/js/bootstrap.bundle.min.js"></script>
   <script src="../assets/js/popper.min.js"></script>
@@ -124,13 +247,16 @@ async function loadwalletdata(){
         const req = await fetch(appAPI, { method: "POST", body: formdata });
         const res = await req.json();
         data =JSON.parse(res.wallet) ;
+        console.log(data);
         if(data.wallet_code == ''|| res.wallet == 0){
            $("#setrefercode").removeClass("d-none"); 
         }
         
-   
+        localStorage.setItem("walletCODE",data.wallet_code);
+        localStorage.setItem("walletAMT",walletBalance);
       $("#walletCode").val(data.wallet_code);
-      $("#walletbal").val(data.walletBalance);
+      // $("#walletbal").val(data.walletBalance);
+      $("#walletbal").html(data.walletBalance);
   
 }
 
